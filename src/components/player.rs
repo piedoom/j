@@ -1,5 +1,5 @@
 use amethyst::{
-    core::{Transform, math::Vector3, math::Unit, Float},
+    core::{math::Unit, math::Vector3, Float, Transform},
     ecs::{Component, DenseVecStorage, Entity},
     prelude::*,
 };

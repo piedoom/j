@@ -1,4 +1,4 @@
-pub mod data;
 mod common;
+pub mod data;
 
 pub use common::*;

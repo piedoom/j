@@ -12,6 +12,19 @@ pub enum Action {
     Right,
 }
 
+/// All cardinal and diagonal directions
+#[derive(Debug, Hash, Clone, Eq, PartialEq, Serialize, Deserialize)]
+pub enum Direction {
+    North,
+    NorthEast,
+    East,
+    SouthEast,
+    South,
+    SouthWest,
+    West,
+    NorthWest,
+}
+
 impl fmt::Display for Action {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", format!("{:?}", *self))

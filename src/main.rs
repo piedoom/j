@@ -1,5 +1,5 @@
+mod components;
 mod states;
-mod components; 
 mod systems;
 mod util;
 
@@ -27,35 +27,45 @@ use amethyst::{
     window::{ScreenDimensions, Window, WindowBundle},
 };
 
-use std::sync::Arc;
 use crate::states::MainGameState;
+use std::sync::Arc;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
 
     let root_dir = application_root_dir()?;
     let assets_dir = root_dir.join("resources");
-    
 
     let game_data = GameDataBuilder::default()
         // The WindowBundle provides all the scaffolding for opening a window and drawing to it
-        .with_bundle(WindowBundle::from_config_path(assets_dir.join("display_config.ron")))?
-        .with(Processor::<SpriteSheet>::new(), "sprite_sheet_processor", &[])
+        .with_bundle(WindowBundle::from_config_path(
+            assets_dir.join("display_config.ron"),
+        ))?
+        .with(
+            Processor::<SpriteSheet>::new(),
+            "sprite_sheet_processor",
+            &[],
+        )
         .with_bundle(
-            InputBundle::<util::data::GameBindings>::new().with_bindings_from_file(
-                assets_dir.join("bindings_config.ron"),
-            )?,
+            InputBundle::<util::data::GameBindings>::new()
+                .with_bindings_from_file(assets_dir.join("bindings_config.ron"))?,
         )?
         .with_bundle(TransformBundle::new())?
-        .with(systems::MovementSystem::default(), "movement_system", &["transform_system"])
-        .with(systems::PlayerSystem::default(), "player_system", &["transform_system", "movement_system"])
+        .with(
+            systems::MovementSystem::default(),
+            "movement_system",
+            &["transform_system"],
+        )
+        .with(
+            systems::PlayerSystem::default(),
+            "player_system",
+            &["transform_system", "movement_system"],
+        )
         // The renderer must be executed on the same thread consecutively, so we initialize it as thread_local
         // which will always execute on the main thread.
         .with_thread_local(RenderingSystem::<DefaultBackend, _>::new(
             ExampleGraph::default(),
         ));
-
-    
 
     let mut game = Application::new(assets_dir, MainGameState, game_data)?;
     game.run();

@@ -17,14 +17,15 @@ use amethyst::shrev::EventChannel;
 pub struct PlayerSystem {
     reader: Option<ReaderId<ActionEvent>>,
     /// Unit vector that keeps track of keyboard movements
-    direction: (f32, f32),
+    direction: Unit<Vector3<Float>>,
+
 }
 
 impl Default for PlayerSystem {
     fn default() -> Self {
         Self {
             reader: None,
-            direction: (0f32, 0f32),
+            direction: Unit::new_unchecked(Vector3::zeros()),
         }
     }
 }
@@ -47,30 +48,30 @@ impl<'a> System<'a> for PlayerSystem {
 
     fn run(&mut self, (players, mut movements, events, time): Self::SystemData) {
         // add respective data to our movement/direction so our movement system can handle it properly
+
         for event in events.read(self.reader.as_mut().unwrap()) {
             match event {
                 InputEvent::ActionReleased(action) => match action {
-                    Action::Left => self.direction.0 = 0f32,
-                    Action::Right => self.direction.0 = 0f32,
-                    Action::Up => self.direction.1 = 0f32,
-                    Action::Down => self.direction.1 = 0f32,
+                    Action::Left => self.direction.as_mut_unchecked().x = Float::from(0f32),
+                    Action::Right => self.direction.as_mut_unchecked().x = Float::from(0f32),
+                    Action::Up => self.direction.as_mut_unchecked().y = Float::from(0f32),
+                    Action::Down => self.direction.as_mut_unchecked().y = Float::from(0f32),
                     _ => (),
                 },
                 InputEvent::ActionPressed(action) => match action {
-                    Action::Left => self.direction.0 = -1f32,
-                    Action::Right => self.direction.0 = 1f32,
-                    Action::Up => self.direction.1 = 1f32,
-                    Action::Down => self.direction.1 = -1f32,
+                    Action::Left => self.direction.as_mut_unchecked().x = Float::from(-1f32),
+                    Action::Right => self.direction.as_mut_unchecked().x = Float::from(1f32),
+                    Action::Up => self.direction.as_mut_unchecked().y = Float::from(1f32),
+                    Action::Down => self.direction.as_mut_unchecked().y = Float::from(-1f32),
                     _ => (),
                 },
-                
+
                 _ => (),
             }
         }
 
         for (player, movement) in (&players, &mut movements).join() {
-            movement.direction(self.direction);
-            
+            movement.set_target(self.direction);
         }
     }
 }

@@ -1,11 +1,8 @@
+use crate::{components::*, util};
 use amethyst::{
+    core::{math::Vector3, Float, Transform},
     prelude::*,
-    core::Transform,
     renderer::SpriteRender,
-};
-use crate::{
-    components::*,
-    util,
 };
 pub struct MainGameState;
 
@@ -17,13 +14,18 @@ impl SimpleState for MainGameState {
         let character_sheet = util::load_sprites(world, "textures/chars.png");
 
         // assemble an entity
-        world.create_entity()
-            .with(Transform::default())
+        let transform = Transform::default();
+        world
+            .create_entity()
+            .with(transform.clone())
             .with(SpriteRender {
                 sprite_sheet: character_sheet.clone(),
                 sprite_number: 0,
             })
-            .with(Movement::default())
+            .with(Movement::new(
+                transform.clone().translation().clone(),
+                Float::from(32f32),
+            ))
             .with(Player::default())
             .build();
     }
