@@ -1,3 +1,5 @@
+#![feature(duration_float)]
+
 mod components;
 mod states;
 mod systems;
@@ -51,6 +53,11 @@ fn main() -> amethyst::Result<()> {
                 .with_bindings_from_file(assets_dir.join("bindings_config.ron"))?,
         )?
         .with_bundle(TransformBundle::new())?
+        .with(
+            systems::GridMovementSystem::default(),
+            "grid_movement_system",
+            &["transform_system"],
+        )
         .with(
             systems::MovementSystem::default(),
             "movement_system",

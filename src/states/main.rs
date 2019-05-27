@@ -22,10 +22,7 @@ impl SimpleState for MainGameState {
                 sprite_sheet: character_sheet.clone(),
                 sprite_number: 0,
             })
-            .with(Movement::new(
-                transform.clone().translation().clone(),
-                Float::from(32f32),
-            ))
+            .with(Movement::default())
             .with(Player::default())
             .build();
     }

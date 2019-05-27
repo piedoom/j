@@ -1,5 +1,5 @@
 mod movement;
 mod player;
 
-pub use movement::MovementSystem;
+pub use movement::{GridMovementSystem, MovementSystem};
 pub use player::PlayerSystem;

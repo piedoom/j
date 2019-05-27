@@ -12,8 +12,8 @@ use amethyst::{
     },
 };
 
-const ARENA_HEIGHT: f32 = 200.0;
-const ARENA_WIDTH: f32 = 200.0;
+const ARENA_HEIGHT: f32 = 500.0;
+const ARENA_WIDTH: f32 = 500.0;
 
 /// Add a camera to the world
 pub fn add_camera(world: &mut World) {

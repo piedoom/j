@@ -2,7 +2,7 @@ use crate::{
     components::{Movement, Player},
     util::data::{Action, ActionEvent},
 };
-use amethyst::core::Time;
+use amethyst::core::{Time, Transform};
 use amethyst::core::{
     math::{Unit, Vector3},
     EventReader, Float,
@@ -33,6 +33,7 @@ impl Default for PlayerSystem {
 impl<'a> System<'a> for PlayerSystem {
     type SystemData = (
         ReadStorage<'a, Player>,
+        ReadStorage<'a, Transform>,
         WriteStorage<'a, Movement>,
         Write<'a, EventChannel<ActionEvent>>,
         Read<'a, Time>,
@@ -46,7 +47,7 @@ impl<'a> System<'a> for PlayerSystem {
         );
     }
 
-    fn run(&mut self, (players, mut movements, events, time): Self::SystemData) {
+    fn run(&mut self, (players, transforms, mut movements, events, time): Self::SystemData) {
         // add respective data to our movement/direction so our movement system can handle it properly
 
         for event in events.read(self.reader.as_mut().unwrap()) {
@@ -71,7 +72,7 @@ impl<'a> System<'a> for PlayerSystem {
         }
 
         for (player, movement) in (&players, &mut movements).join() {
-            movement.set_target(self.direction);
+            movement.set_direction(self.direction);
         }
     }
 }
