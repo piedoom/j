@@ -21,8 +21,8 @@ use std::io::BufReader;
 use std::path::Path;
 use tiled::parse;
 
-const ARENA_HEIGHT: f32 = 5000.0;
-const ARENA_WIDTH: f32 = 5000.0;
+const ARENA_HEIGHT: f32 = 500.0;
+const ARENA_WIDTH: f32 = 500.0;
 
 /// Add a camera to the world
 pub fn add_camera(world: &mut World) {
@@ -126,10 +126,10 @@ pub fn load_and_create_tilemap(world: &mut World, texture_path: &str, map_path: 
                 // Coordinates of the 64x64 tile sprite inside the whole
                 let offset = tile_data.get_tileset_offset_grid();
                 let tex_coords = TextureCoordinates {
-                    right: y as f32 * offset.columns,
-                    left: (y + 1) as f32 * offset.columns,
-                    bottom: x as f32 * offset.rows,
-                    top: (x + 1) as f32 * offset.rows,
+                    left: y as f32 * offset.columns,
+                    right: (y + 1) as f32 * offset.columns,
+                    top: x as f32 * offset.rows,
+                    bottom: (x + 1) as f32 * offset.rows,
                 };
 
                 let sprite = Sprite {
@@ -190,9 +190,9 @@ pub fn load_and_create_tilemap(world: &mut World, texture_path: &str, map_path: 
                     let coordinates = (
                         Float::from(i_column as f32 * tile_data.tile_size.x as f32),
                         Float::from(
-                            (screen_height) - (i_row as f32 * tile_data.tile_size.y as f32),
+                            1f32 - (i_row as f32 * tile_data.tile_size.y as f32),
                         ),
-                        Float::from(0.0),
+                        Float::from(-10.0),
                     );
                     // Offset the positions by half the tile size so they're nice and snuggly on the screen
                     // Alternatively could use the Sprite offsets instead: [-32.0, 32.0]. Depends on the use case I guess.

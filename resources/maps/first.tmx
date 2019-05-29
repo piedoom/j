@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="1">
-   <tileset firstgid="1" name="indoor" tilewidth="16" tileheight="16" tilecount="1000" columns="40">
-      <image source="../textures/tilemaps/indoor.png" width="640" height="400"/>
-   </tileset>
-   <layer id="1" name="background" width="12" height="10">
-      <data encoding="csv">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="18" nextobjectid="1">
+ <tileset firstgid="1" name="indoor" tilewidth="16" tileheight="16" tilecount="1000" columns="40">
+  <image source="../textures/tilemaps/indoor.png" width="640" height="400"/>
+ </tileset>
+ <layer id="16" name="background" width="12" height="10">
+  <data encoding="csv">
 122,123,123,123,123,123,123,123,123,124,124,124,
 162,163,163,163,163,163,163,163,163,164,164,164,
 202,203,203,203,203,203,203,203,203,204,42,44,
@@ -15,10 +15,10 @@
 42,43,43,43,43,43,43,43,43,43,43,44,
 42,43,43,43,43,43,43,43,43,43,43,44,
 82,83,83,83,83,83,83,83,83,83,83,84
-      </data>
-   </layer>
-   <layer id="2" name="scenery" width="12" height="10">
-      <data encoding="csv">
+</data>
+ </layer>
+ <layer id="17" name="scenery" width="12" height="10">
+  <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,603,604,
 0,481,482,483,0,0,172,0,0,0,643,644,
 0,521,522,523,489,0,212,0,0,0,683,684,
@@ -29,6 +29,6 @@
 0,361,362,363,0,0,257,134,135,136,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0
-      </data>
-   </layer>
+</data>
+ </layer>
 </map>
