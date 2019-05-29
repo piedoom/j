@@ -4,6 +4,7 @@ use amethyst::{
     prelude::*,
     renderer::SpriteRender,
 };
+
 pub struct MainGameState;
 
 impl SimpleState for MainGameState {
@@ -13,7 +14,7 @@ impl SimpleState for MainGameState {
         util::add_camera(world);
         let character_sheet = util::load_sprites(world, "textures/chars.png");
 
-        // assemble an entity
+        // assemble a player entity
         let transform = Transform::default();
         world
             .create_entity()
@@ -25,5 +26,8 @@ impl SimpleState for MainGameState {
             .with(Movement::default())
             .with(Player::default())
             .build();
+
+        // build map
+        util::load_and_create_tilemap(world, "textures/tilemaps/indoor.png", "maps/first.tmx");
     }
 }

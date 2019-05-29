@@ -2,9 +2,9 @@
 
 use amethyst::{
     core::{
-        timing::Time,
         math::Unit,
         math::{Vector2, Vector3},
+        timing::Time,
         Float, Transform,
     },
     ecs::{Component, DenseVecStorage, Entity},
@@ -62,7 +62,12 @@ impl GridMovement {
     /// integer values.
     /// * `transform` - The associated transform of this component's entity. We use it to read our
     /// current transforms so we don't need to keep a copy of the data.
-    pub fn set_move(&mut self, direction: &Unit<Vector3<Float>>, transform: &Transform, time: Duration) -> &Self {
+    pub fn set_move(
+        &mut self,
+        direction: &Unit<Vector3<Float>>,
+        transform: &Transform,
+        time: Duration,
+    ) -> &Self {
         // If our current transform position is the same as our target position, that means we are
         // free to start another movement along the grid.
         if transform.translation() == &self.target {
@@ -76,7 +81,6 @@ impl GridMovement {
         self
     }
 
-
     pub fn set_size(&mut self, size: Float) -> &Self {
         self.size = size;
         self
@@ -87,7 +91,9 @@ impl GridMovement {
         let mut difference = current_time - self.start_time;
         // cap value if too high. Difference should always be less than or equal to duration. If
         // not, we can just return 1.
-        if !(difference <= self.duration) { return Float::from(1.) }
+        if !(difference <= self.duration) {
+            return Float::from(1.);
+        }
         // normalize and return
         Float::from(difference.div_duration_f64(self.duration))
     }

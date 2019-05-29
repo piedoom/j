@@ -2,11 +2,11 @@ use crate::{
     components::{Movement, Player},
     util::data::{Action, ActionEvent},
 };
-use amethyst::core::{Time, Transform};
 use amethyst::core::{
     math::{Unit, Vector3},
     EventReader, Float,
 };
+use amethyst::core::{Time, Transform};
 use amethyst::ecs::{
     DenseVecStorage, Join, Read, ReadStorage, ReaderId, Resources, System, SystemData, Write,
     WriteStorage,
@@ -18,7 +18,6 @@ pub struct PlayerSystem {
     reader: Option<ReaderId<ActionEvent>>,
     /// Unit vector that keeps track of keyboard movements
     direction: Unit<Vector3<Float>>,
-
 }
 
 impl Default for PlayerSystem {
