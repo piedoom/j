@@ -21,8 +21,8 @@ use std::io::BufReader;
 use std::path::Path;
 use tiled::parse;
 
-const ARENA_HEIGHT: f32 = 1000.0;
-const ARENA_WIDTH: f32 = 1000.0;
+const ARENA_HEIGHT: f32 = 5000.0;
+const ARENA_WIDTH: f32 = 5000.0;
 
 /// Add a camera to the world
 pub fn add_camera(world: &mut World) {
@@ -121,15 +121,13 @@ pub fn load_and_create_tilemap(world: &mut World, texture_path: &str, map_path: 
         let mut tile_sprites: Vec<Sprite> = Vec::new();
 
         // The x-axis needs to be reversed for TextureCoordinates
-        for x in (0..tile_data.get_tileset_sprite_grid().rows).rev() {
+        for x in 0..tile_data.get_tileset_sprite_grid().rows {
             for y in 0..tile_data.get_tileset_sprite_grid().columns {
                 // Coordinates of the 64x64 tile sprite inside the whole
-                // tileset image
-                // Important: TextureCoordinates Y axis goes from BOTTOM (0.0) to TOP (1.0)
                 let offset = tile_data.get_tileset_offset_grid();
                 let tex_coords = TextureCoordinates {
-                    left: y as f32 * offset.columns,
-                    right: (y + 1) as f32 * offset.columns,
+                    right: y as f32 * offset.columns,
+                    left: (y + 1) as f32 * offset.columns,
                     bottom: x as f32 * offset.rows,
                     top: (x + 1) as f32 * offset.rows,
                 };
@@ -156,7 +154,6 @@ pub fn load_and_create_tilemap(world: &mut World, texture_path: &str, map_path: 
         let sprite_sheet_handle = {
             let loader = world.read_resource::<Loader>();
             let sprite_sheet_storage = world.read_resource::<AssetStorage<SpriteSheet>>();
-
             loader.load_from_data(sprite_sheet, (), &sprite_sheet_storage)
         };
 
@@ -191,9 +188,9 @@ pub fn load_and_create_tilemap(world: &mut World, texture_path: &str, map_path: 
                     // Bottom Left is 0,0 so we flip it to Top Left with the
                     // ScreenDimensions.height since tiled coordinates start from top
                     let coordinates = (
-                        Float::from(i_row as f32 * tile_data.tile_size.x as f32),
+                        Float::from(i_column as f32 * tile_data.tile_size.x as f32),
                         Float::from(
-                            (screen_height) - (i_column as f32 * tile_data.tile_size.y as f32),
+                            (screen_height) - (i_row as f32 * tile_data.tile_size.y as f32),
                         ),
                         Float::from(0.0),
                     );

@@ -29,5 +29,6 @@ impl SimpleState for MainGameState {
 
         // build map
         util::load_and_create_tilemap(world, "textures/tilemaps/indoor.png", "maps/first.tmx");
+
     }
 }
