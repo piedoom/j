@@ -1,3 +1,3 @@
 mod main;
 
-pub use main::MainGameState;
+pub use main::{MainGameState, LoadingState};

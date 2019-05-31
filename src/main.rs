@@ -6,7 +6,7 @@ mod systems;
 mod util;
 
 use amethyst::{
-    assets::Processor,
+    assets::{AssetStorage, Handle, Loader, ProgressCounter, Progress, Processor},
     core::transform::TransformBundle,
     ecs::{ReadExpect, Resources, SystemData},
     input::InputBundle,
@@ -29,8 +29,9 @@ use amethyst::{
     window::{ScreenDimensions, Window, WindowBundle},
 };
 
-use crate::states::MainGameState;
+use crate::states::LoadingState;
 use std::sync::Arc;
+use tiled::Map;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -48,6 +49,7 @@ fn main() -> amethyst::Result<()> {
             "sprite_sheet_processor",
             &[],
         )
+        .with(Processor::<Map>::new(), "map_processor", &[])
         .with_bundle(
             InputBundle::<util::data::GameBindings>::new()
                 .with_bindings_from_file(assets_dir.join("bindings_config.ron"))?,
@@ -74,7 +76,11 @@ fn main() -> amethyst::Result<()> {
             ExampleGraph::default(),
         ));
 
-    let mut game = Application::new(assets_dir, MainGameState, game_data)?;
+    let mut game = Application::new(assets_dir, LoadingState {
+        progress_counter: ProgressCounter::new(),
+        map_handle: None,
+        path: "maps/first.tmx",
+    }, game_data)?;
     game.run();
     Ok(())
 }

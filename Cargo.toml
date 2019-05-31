@@ -5,6 +5,6 @@ authors = []
 edition = "2018"
 
 [dependencies]
-amethyst = { git = "https://github.com/amethyst/amethyst", features = ["nightly", "vulkan"] }
+amethyst = { git = "https://github.com/amethyst/amethyst", features = ["nightly", "metal"]}#, features = ["nightly", "vulkan"] }
 serde = "*"
-tiled = "0.8.0"
+tiled = {path = "../rs-tiled", features=["amethyst"]}
