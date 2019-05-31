@@ -23,7 +23,8 @@ use std::path::Path;
 use tiled::{Map, TmxFormat};
 
 pub struct MainGameState {
-    map_handle: Handle<Map>,
+    pub map_handle: Handle<Map>,
+    pub texture_handle: Handle<Texture>,
 }
 
 impl SimpleState for MainGameState {
@@ -231,44 +232,4 @@ impl TileData {
 struct MapData {
     tile_data: TileData,
     sprite_sheet_handle: SpriteSheetHandle,
-}
-
-pub struct LoadingState<'a> {
-    /// Tracks loaded assets.
-    pub progress_counter: ProgressCounter,
-    /// Handle to the map
-    pub map_handle: Option<Handle<Map>>,
-    pub path: &'a str,
-}
-
-impl<'a> SimpleState for LoadingState<'a> {
-    fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
-        let loader = &data.world.read_resource::<Loader>();
-        let map_handle = loader.load(
-            self.path,
-            TmxFormat,
-            &mut self.progress_counter,
-            &data.world.read_resource::<AssetStorage<Map>>(),
-        );
-
-        self.map_handle = Some(map_handle);
-    }
-
-    fn update(
-        &mut self,
-        _data: &mut StateData<'_, GameData<'_, '_>>,
-    ) -> SimpleTrans {
-        if self.progress_counter.is_complete() {
-            Trans::Switch(Box::new(MainGameState {
-                map_handle: self.map_handle
-                    .take()
-                    .expect(
-                        "Expected `map_handle` to exist when \
-                        `progress_counter` is complete."
-                    ),
-            }))
-        } else {
-            Trans::None
-        }
-    }
 }

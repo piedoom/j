@@ -29,7 +29,7 @@ use amethyst::{
     window::{ScreenDimensions, Window, WindowBundle},
 };
 
-use crate::states::LoadingState;
+use crate::states::LoadMapState;
 use std::sync::Arc;
 use tiled::Map;
 
@@ -76,7 +76,7 @@ fn main() -> amethyst::Result<()> {
             ExampleGraph::default(),
         ));
 
-    let mut game = Application::new(assets_dir, LoadingState {
+    let mut game = Application::new(assets_dir, LoadMapState {
         progress_counter: ProgressCounter::new(),
         map_handle: None,
         path: "maps/first.tmx",
