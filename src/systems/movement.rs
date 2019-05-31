@@ -1,9 +1,9 @@
 use crate::components::{GridMovement, Movement};
-use amethyst::animation::InterpolationFunction::Linear;
+
 use amethyst::core::Time;
-use amethyst::core::{math::Unit, math::Vector3, Float, Transform};
-use amethyst::ecs::{prelude::*, Join, Read, ReadStorage, Resources, System, WriteStorage};
-use amethyst::prelude::*;
+use amethyst::core::{Float, Transform};
+use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage};
+
 
 pub struct GridMovementSystem {}
 
@@ -21,7 +21,7 @@ impl<'a> System<'a> for GridMovementSystem {
     );
 
     fn run(&mut self, (mut movements, mut transforms, time): Self::SystemData) {
-        for (mut movement, transform) in (&mut movements, &mut transforms).join() {
+        for (movement, transform) in (&mut movements, &mut transforms).join() {
             // Lerp from the movement start to the movement end.
             transform.set_translation(movement.start.lerp(
                 &movement.target,

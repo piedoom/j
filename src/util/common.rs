@@ -1,24 +1,20 @@
 //! Boilerplate for common actions like setting up a camera or loading a sprite sheet
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
-    core::math::{Vector2, Vector3},
     core::transform::Transform,
-    core::Float,
-    ecs::{prelude::*, Read, Write},
-    prelude::*,
+    ecs::prelude::*,
     renderer::{
         camera::{Camera, Projection},
         formats::texture::ImageFormat,
         sprite::{
-            Sprite, SpriteRender, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle,
-            TextureCoordinates,
+            SpriteSheet, SpriteSheetFormat, SpriteSheetHandle,
         },
         Texture,
     },
 };
-use std::fs::File;
-use std::path::Path;
-use tiled::{Map, TmxFormat};
+
+
+
 
 const ARENA_HEIGHT: f32 = 500.0;
 const ARENA_WIDTH: f32 = 500.0;
@@ -63,15 +59,5 @@ pub fn load_texture(world: &mut World, path: &str) -> Handle<Texture> {
         ImageFormat::default(),
         (),
         &world.read_resource::<AssetStorage<Texture>>(),
-    )
-}
-
-pub fn load_map(world: &mut World, path: &str) -> Handle<Map> {
-    let loader = &world.read_resource::<Loader>();
-    loader.load(
-        path,
-        TmxFormat,
-        (),
-        &world.read_resource::<AssetStorage<Map>>(),
     )
 }

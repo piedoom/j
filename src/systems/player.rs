@@ -4,11 +4,11 @@ use crate::{
 };
 use amethyst::core::{
     math::{Unit, Vector3},
-    EventReader, Float,
+    Float,
 };
 use amethyst::core::{Time, Transform};
 use amethyst::ecs::{
-    DenseVecStorage, Join, Read, ReadStorage, ReaderId, Resources, System, SystemData, Write,
+    Join, Read, ReadStorage, ReaderId, Resources, System, SystemData, Write,
     WriteStorage,
 };
 use amethyst::input::InputEvent;
@@ -46,7 +46,7 @@ impl<'a> System<'a> for PlayerSystem {
         );
     }
 
-    fn run(&mut self, (players, transforms, mut movements, events, time): Self::SystemData) {
+    fn run(&mut self, (players, _transforms, mut movements, events, _time): Self::SystemData) {
         // add respective data to our movement/direction so our movement system can handle it properly
 
         for event in events.read(self.reader.as_mut().unwrap()) {
@@ -56,21 +56,19 @@ impl<'a> System<'a> for PlayerSystem {
                     Action::Right => self.direction.as_mut_unchecked().x = Float::from(0f32),
                     Action::Up => self.direction.as_mut_unchecked().y = Float::from(0f32),
                     Action::Down => self.direction.as_mut_unchecked().y = Float::from(0f32),
-                    _ => (),
                 },
                 InputEvent::ActionPressed(action) => match action {
                     Action::Left => self.direction.as_mut_unchecked().x = Float::from(-1f32),
                     Action::Right => self.direction.as_mut_unchecked().x = Float::from(1f32),
                     Action::Up => self.direction.as_mut_unchecked().y = Float::from(1f32),
                     Action::Down => self.direction.as_mut_unchecked().y = Float::from(-1f32),
-                    _ => (),
                 },
 
                 _ => (),
             }
         }
 
-        for (player, movement) in (&players, &mut movements).join() {
+        for (_player, movement) in (&players, &mut movements).join() {
             movement.set_direction(self.direction);
         }
     }

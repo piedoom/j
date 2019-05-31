@@ -2,25 +2,23 @@
 use crate::{components::*, util};
 
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader, ProgressCounter, Progress},
+    assets::{AssetStorage, Handle, Loader},
     core::math::{Vector2, Vector3},
     core::transform::Transform,
     core::Float,
     ecs::{prelude::*, Read, Write},
     prelude::*,
     renderer::{
-        camera::{Camera, Projection},
-        formats::texture::ImageFormat,
         sprite::{
-            Sprite, SpriteRender, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle,
+            Sprite, SpriteRender, SpriteSheet, SpriteSheetHandle,
             TextureCoordinates,
         },
         Texture,
     },
 };
-use std::fs::File;
-use std::path::Path;
-use tiled::{Map, TmxFormat};
+
+
+use tiled::{Map};
 
 pub struct MainGameState {
     pub map_handle: Handle<Map>,
@@ -51,7 +49,6 @@ impl SimpleState for MainGameState {
             Entities<'a>,
             Write<'a, AssetStorage<Map>>,
             WriteStorage<'a, Transform>,
-            Write<'a, AssetStorage<Texture>>,
             WriteStorage<'a, SpriteRender>,
             Read<'a, AssetStorage<SpriteSheet>>,
             ReadExpect<'a, Loader>,
@@ -60,20 +57,12 @@ impl SimpleState for MainGameState {
         world.exec(
         |(
             entities,
-            mut map_storage,
+            map_storage,
             mut transform_storage,
-            mut texture_storage,
             mut sprite_render_storage,
             sprite_sheet_storage,
             loader,
         ): SystemData| {
-            let texture_handle = loader.load(
-                "textures/tilemaps/indoor.png",
-                ImageFormat::default(),
-                (),
-                &texture_storage,
-            );
-
             let map = map_storage.get(&self.map_handle.clone()).unwrap();
                 // Now, we need to loop over each tileset. A tileset is - here - the same as a generated spritesheet.
                 // Here, we reutrn `MapData`, which is just a struct wrapper for the tile data and spritesheet. In
@@ -120,7 +109,7 @@ impl SimpleState for MainGameState {
 
                         // The spritesheet containing all the sprites we calculated in this tileset
                         let sprite_sheet = SpriteSheet {
-                            texture: texture_handle.clone(),
+                            texture: self.texture_handle.clone(),
                             sprites: tile_sprites,
                         };
 

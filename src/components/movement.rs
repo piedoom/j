@@ -1,20 +1,15 @@
 //! Component for+ axis-moving players and AI
-
 use amethyst::{
     core::{
         math::Unit,
-        math::{Vector2, Vector3},
+        math::{Vector3},
         timing::Time,
         Float, Transform,
     },
-    ecs::{Component, DenseVecStorage, Entity},
-    prelude::*,
+    ecs::{Component, DenseVecStorage},
 };
 
 use std::time::Duration;
-
-use crate::util::data::Direction;
-use std::collections::VecDeque;
 
 pub struct GridMovement {
     /// Milliseconds taken to move to one position
@@ -36,12 +31,13 @@ impl Component for GridMovement {
     type Storage = DenseVecStorage<Self>;
 }
 
+#[allow(dead_code)]
 impl GridMovement {
     /// Create a new movement component
     ///
     /// * `translation` - the initial starting point (same as the transform) for this component.
     /// This is useful so we can position objects on an absolute grid and later compare between them
-    pub fn new(translation: Vector3<Float>, size: Float) -> Self {
+    pub fn new(_translation: Vector3<Float>, size: Float) -> Self {
         Self {
             duration: Duration::from_millis(200u64),
             size,
@@ -88,7 +84,7 @@ impl GridMovement {
 
     /// Return a number from 0 to 1. Used for movement interpolation
     pub fn normalize_duration(&self, current_time: Duration) -> Float {
-        let mut difference = current_time - self.start_time;
+        let difference = current_time - self.start_time;
         // cap value if too high. Difference should always be less than or equal to duration. If
         // not, we can just return 1.
         if !(difference <= self.duration) {
@@ -105,6 +101,7 @@ impl GridMovement {
 /// * `Nearest` - snap to the nearest grid point, even if it is "backwards". Can cause "rubber band"
 /// type look.
 /// * `Continuation` - finish any movement started, even if it is not the nearest snap point
+#[allow(dead_code)]
 pub enum SnapMode {
     None,
     Nearest,
@@ -145,7 +142,7 @@ impl Movement {
 
     /// Get the transform to which to append to the current transform
     pub fn next(&self, time: &Time) -> Vector3<Float> {
-        let scalar = (Float::from(time.delta_seconds()) * self.speed);
+        let scalar = Float::from(time.delta_seconds()) * self.speed;
         self.direction.scale(scalar)
     }
 }

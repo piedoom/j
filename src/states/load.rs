@@ -1,24 +1,15 @@
 use crate::states::MainGameState;
 
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader, ProgressCounter, Progress},
-    core::math::{Vector2, Vector3},
-    core::transform::Transform,
-    core::Float,
-    ecs::{prelude::*, Read, Write},
+    assets::{AssetStorage, Handle, Loader, ProgressCounter},
     prelude::*,
     renderer::{
-        camera::{Camera, Projection},
         formats::texture::ImageFormat,
-        sprite::{
-            Sprite, SpriteRender, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle,
-            TextureCoordinates,
-        },
         Texture,
     },
 };
-use std::fs::File;
-use std::path::Path;
+
+
 use tiled::{Map, TmxFormat};
 
 /// Because our map asset contains the paths to textures, we need two load states: one

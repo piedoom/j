@@ -6,7 +6,7 @@ mod systems;
 mod util;
 
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader, ProgressCounter, Progress, Processor},
+    assets::{ProgressCounter, Processor},
     core::transform::TransformBundle,
     ecs::{ReadExpect, Resources, SystemData},
     input::InputBundle,
