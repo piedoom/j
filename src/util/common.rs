@@ -1,6 +1,6 @@
 //! Boilerplate for common actions like setting up a camera or loading a sprite sheet
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader},
+    assets::{AssetStorage, Handle, Loader, RonFormat},
     core::transform::Transform,
     ecs::prelude::*,
     renderer::{
@@ -18,26 +18,6 @@ use amethyst::{
 
 const ARENA_HEIGHT: f32 = 500.0;
 const ARENA_WIDTH: f32 = 500.0;
-
-/// Add a camera to the world
-pub fn add_camera(world: &mut World) {
-    let mut transform = Transform::default();
-    transform.set_translation_xyz(-(ARENA_WIDTH / 2.), ARENA_HEIGHT / 2., 1.);
-    world
-        .create_entity()
-        // A default camera can be created with standard_2d, but we instead create a camera
-        // which is centered on our gameplay area (ARENA)
-        .with(Camera::from(Projection::orthographic(
-            0.0,
-            ARENA_WIDTH,
-            0.0,
-            ARENA_HEIGHT,
-            0.1,
-            2000.0,
-        )))
-        .with(transform)
-        .build();
-}
 
 /// Return a handle to a sprite sheet
 pub fn load_sprites(world: &mut World, path: &str) -> SpriteSheetHandle {

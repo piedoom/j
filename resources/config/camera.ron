@@ -1,0 +1,7 @@
+(
+    origin: (0, 0),
+    size: (250, 250),
+    // z-near and far clipping of our ortho camera
+    znear: 0.1,
+    zfar: 2000.0,
+)

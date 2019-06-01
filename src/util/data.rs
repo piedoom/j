@@ -1,5 +1,10 @@
 //! Contains commonly used data structures
-use amethyst::input::{BindingTypes, InputEvent};
+use amethyst::{
+    input::{BindingTypes, InputEvent},
+    assets::{Handle, Asset, ProcessingState},
+    error::Error,
+    ecs::VecStorage,
+};
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
@@ -38,3 +43,24 @@ impl BindingTypes for GameBindings {
 }
 
 pub type ActionEvent = InputEvent<Action>;
+
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct CameraConfig {
+    pub origin: (usize, usize),
+    pub size: (usize, usize),
+    pub znear: f32,
+    pub zfar: f32,
+}
+
+impl Asset for CameraConfig {
+    const NAME: &'static str = "j::CameraConfig";
+    type Data = Self;
+    type HandleStorage = VecStorage<Handle<CameraConfig>>;
+}
+
+impl From<CameraConfig> for Result<ProcessingState<CameraConfig>, Error> {
+    fn from(camera_config: CameraConfig)
+        -> Result<ProcessingState<CameraConfig>, Error> {
+            Ok(ProcessingState::Loaded(camera_config))
+        }
+}

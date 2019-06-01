@@ -29,7 +29,10 @@ use amethyst::{
     window::{ScreenDimensions, Window, WindowBundle},
 };
 
-use crate::states::LoadMapState;
+use crate::{
+    states::LoadMapState,
+    util::data::CameraConfig,
+};
 use std::sync::Arc;
 use tiled::Map;
 
@@ -38,11 +41,12 @@ fn main() -> amethyst::Result<()> {
 
     let root_dir = application_root_dir()?;
     let assets_dir = root_dir.join("resources");
+    let config_dir = assets_dir.join("config");
 
     let game_data = GameDataBuilder::default()
         // The WindowBundle provides all the scaffolding for opening a window and drawing to it
         .with_bundle(WindowBundle::from_config_path(
-            assets_dir.join("display_config.ron"),
+            config_dir.join("display.ron"),
         ))?
         .with(
             Processor::<SpriteSheet>::new(),
@@ -50,9 +54,10 @@ fn main() -> amethyst::Result<()> {
             &[],
         )
         .with(Processor::<Map>::new(), "map_processor", &[])
+        .with(Processor::<CameraConfig>::new(), "camera_config_processor", &[])
         .with_bundle(
             InputBundle::<util::data::GameBindings>::new()
-                .with_bindings_from_file(assets_dir.join("bindings_config.ron"))?,
+                .with_bindings_from_file(config_dir.join("bindings.ron"))?,
         )?
         .with_bundle(TransformBundle::new())?
         .with(

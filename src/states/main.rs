@@ -1,19 +1,24 @@
 //! Boilerplate for common actions like setting up a camera or loading a sprite sheet
-use crate::{components::*, util};
+use crate::{
+    components::*, 
+    util,
+    util::data::CameraConfig,
+};
 
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
     core::math::{Vector2, Vector3},
-    core::transform::Transform,
+    core::transform::{Transform, Parent},
     core::Float,
     ecs::{prelude::*, Read, Write},
     prelude::*,
     renderer::{
         sprite::{
             Sprite, SpriteRender, SpriteSheet, SpriteSheetHandle,
-            TextureCoordinates,
+            TextureCoordinates
         },
         Texture,
+        camera::{Camera, Projection},
     },
 };
 
@@ -23,46 +28,77 @@ use tiled::{Map};
 pub struct MainGameState {
     pub map_handle: Handle<Map>,
     pub texture_handle: Handle<Texture>,
+    pub camera_config_handle: Handle<CameraConfig>,
+    pub player_spritesheet_handle: Handle<SpriteSheet>,
 }
 
 impl SimpleState for MainGameState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
-        let world = data.world;
-
-        util::add_camera(world);
-        let character_sheet = util::load_sprites(world, "textures/chars.png");
-
-        // assemble a player entity
-        let transform = Transform::default();
-        world
-            .create_entity()
-            .with(transform.clone())
-            .with(SpriteRender {
-                sprite_sheet: character_sheet.clone(),
-                sprite_number: 0,
-            })
-            .with(Movement::default())
-            .with(Player::default())
-            .build();
-
+        // create the map and other loaded stuff
         type SystemData<'a> = (
             Entities<'a>,
             Write<'a, AssetStorage<Map>>,
+            Write<'a, AssetStorage<CameraConfig>>,
+            WriteStorage<'a, Player>,
+            WriteStorage<'a, Movement>,
             WriteStorage<'a, Transform>,
             WriteStorage<'a, SpriteRender>,
+            WriteStorage<'a, Camera>,
+            WriteStorage<'a, Parent>,
             Read<'a, AssetStorage<SpriteSheet>>,
             ReadExpect<'a, Loader>,
         );
 
-        world.exec(
+        data.world.exec(
         |(
             entities,
             map_storage,
+            camera_config_storage,
+            mut player_storage,
+            mut movement_storage,
             mut transform_storage,
             mut sprite_render_storage,
+            mut camera_storage,
+            mut parent_storage,
             sprite_sheet_storage,
             loader,
         ): SystemData| {
+
+            // Build the player
+            let player = entities
+                .build_entity()
+                .with(Transform::default(), &mut transform_storage)
+                .with(SpriteRender {
+                    sprite_sheet: self.player_spritesheet_handle.clone(),
+                    sprite_number: 0,
+                }, &mut sprite_render_storage)
+                .with(Movement::default(), &mut movement_storage)
+                .with(Player::default(), &mut player_storage)
+                .build();
+
+            // Build the camera
+            let camera_config = camera_config_storage.get(&self.camera_config_handle.clone()).unwrap();
+            entities
+                .build_entity()
+                .with(Camera::from(
+                    Projection::orthographic(
+                        camera_config.origin.0 as f32,
+                        camera_config.size.0 as f32,
+                        camera_config.origin.1 as f32,
+                        camera_config.size.1 as f32,
+                        camera_config.znear,
+                        camera_config.zfar,
+                    )
+                ), &mut camera_storage)
+                .with(Transform::from(Vector3::new(
+                     Float::from(0.0),
+                     Float::from(0.0),
+                     Float::from(1.0),
+                )), &mut transform_storage)
+                .with(Parent::new(player), &mut parent_storage)
+                .build();
+
+            // Build the map
             let map = map_storage.get(&self.map_handle.clone()).unwrap();
                 // Now, we need to loop over each tileset. A tileset is - here - the same as a generated spritesheet.
                 // Here, we reutrn `MapData`, which is just a struct wrapper for the tile data and spritesheet. In
